@@ -5,6 +5,9 @@ import Container from 'react-bootstrap/Container';
 import React, { useMemo, useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 function MainTable() {
 
   const [loadingData, setLoadingData] = useState(true);
@@ -19,40 +22,54 @@ function MainTable() {
 
   const [data, setData] = useState([]);
 
-  async function getNotes() {
-    await axios
-      .get("/api/notes/showAll")
-      .then((response) => {
-        // check if the data is populated
-        setData(response.data);
-        // you tell it that you had the result
-        setLoadingData(false);
-      });
-  }
+    //gotta make these promises so that toasts work.
+    const getNotes = () =>
+        new Promise( (resolve, reject) => {
+            axios.get("/api/notes/showAll")
+            .then((response) => {
+                setData(response.data);
+                setLoadingData(false);
+                resolve();
+            }).catch((err) => {
+                reject(err.response.data.message);
+            })
+        }
+    )
 
   useEffect(() => {
-    async function getData() {
-      await getNotes();
-    }
-
-    if (loadingData) {
-      // if the result is not ready so you make the axios call
-      getData();
-    }
+    toast.promise(getNotes, {
+      error: {
+          render({data}){
+              return data;
+          }
+      }
+  });
   }, []);
 
-  async function deleteNote(id) {
-
-    if(confirm('do you really want to delete?')) {
-    await axios
-      .delete("/api/notes/delete/" + id)
-      .then((response) => {
-        getNotes();
-      });
-    } else {
-      console.log('rejected')
+  const deleteNote = (id) =>
+    new Promise( (resolve, reject) => {
+      if(confirm('do you really want to delete?')) {
+        axios
+          .delete("/api/notes/delete/" + id)
+          .then((response) => {
+            getNotes();
+            resolve();
+          });
+        } else {
+          reject('Request cancelled')
+        }
     }
-  }
+  )
+
+  const handleDelete = (id) => toast.promise(deleteNote(id), {
+    success: 'Successfully deleted note!',
+    error: {
+        render({data}){
+            return data;
+        }
+    }
+  });
+
 
   return (
     <Container>
@@ -89,7 +106,7 @@ function MainTable() {
                   <Link to={"/notes/edit/"+row.id}>
                     <Button variant='warning' >Edit</Button>{' '}
                   </Link>
-                  <Button variant='danger' onClick={() => deleteNote(row.id)} >Delete</Button>
+                  <Button variant='danger' onClick={() => handleDelete(row.id)} >Delete</Button>
                 </td>
               </tr>
             ))}

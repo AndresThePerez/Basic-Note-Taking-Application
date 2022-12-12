@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import {Form, Button, Toast} from 'react-bootstrap'
 import { useParams, useNavigate } from 'react-router-dom';
 
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 function EditCategoryComponent() {
 
     //id passed in
@@ -16,31 +19,51 @@ function EditCategoryComponent() {
     //name that is being changed... probably could juse use the one object I just declared.
     const [name, setName] = useState([]);
 
-    useEffect(() => {
-        //get the categories
-        async function getCategory() {
-          await axios
+        //gotta make these promises so that toasts work.
+    const getCategory = () =>
+        new Promise( (resolve, reject) => {
+            axios
             .get("/api/categories/" + id)
             .then((response) => {
                 setCategory(response.data);
                 setName(response.data.name);
             }).catch((err) => {
-                console.log(err);
+                reject(err.response.data.message);
             });
         }
-        getCategory();
+    )
+
+    useEffect(() => {
+        toast.promise(getCategory, {
+            error: 'Error retrieving categories'
+        });
       }, []);
+
+
+
+    const editCategoriesSubmit = () =>
+        new Promise( (resolve, reject) => {
+            axios.put("/api/categories/edit/" + id , {
+                name: name,
+            }).then((response) => {
+                resolve();
+                navigate(-1);
+            }).catch((err) => {
+                reject(err.response.data.message)
+            });
+        }
+    )
 
       let handleSubmit = async (e) => {
         e.preventDefault();
-
-        await axios.put("/api/categories/edit/" + id , {
-            name: name,
-        }).then((response) => {
-            console.log('success', response)
-        }).catch((err) => {
-            console.log("err", err)
-        }).finally(() => navigate(-1));
+        toast.promise(editCategoriesSubmit, {
+            success: 'Successfully modified note!',
+            error: {
+                render({data}){
+                    return data;
+                }
+            }
+        });
       };
 
 

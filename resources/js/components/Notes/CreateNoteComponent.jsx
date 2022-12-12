@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import {Form, Button, Toast} from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
-import Toasty from '../Base/Toast';
+
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function CreateNoteComponent() {
 
@@ -15,47 +17,59 @@ function CreateNoteComponent() {
 
     const navigate = new useNavigate();
 
-
-    useEffect(() => {
-        async function getCategories() {
-          await axios
-            .get("/api/categories/showAll")
+    //gotta make these promises so that toasts work.
+    const getCategories = () =>
+        new Promise( (resolve, reject) => {
+            axios.get("/api/categories/showAll")
             .then((response) => {
                 setCategories(response.data);
-                <Toasty
-                    title="Success!"
-                    message="Successfully Created!"
-                    variant="success"
-                />
+                resolve();
             }).catch((err) => {
-                <Toasty
-                title="Error!"
-                message={err.data.message}
-                variant="danger"
-                />
+                reject(err.response.data.message);
+            })
+        }
+    )
+
+    const submitCategory = () =>
+        new Promise( (resolve, reject) => {
+            axios.post("/api/notes/create", {
+                title: title,
+                body: body,
+                category_id: category,
+            }).then((response) => {
+                resolve();
+                navigate(-1);
+            }).catch((err) => {
+                reject(err.response.data.message)
             });
         }
-        getCategories();
-      }, []);
+    )
 
-      let handleSubmit = async (e) => {
-        e.preventDefault();
-
-        await axios.post("/api/notes/create", {
-            title: title,
-            body: body,
-            category_id: category,
-        }).then((response) => {
-            <Toasty
-            title="Success!"
-            message="Successfully Created Note!"
-            variant="success"
-            />
-            navigate(-1);
-        }).catch((err) => {
-            console.log(err.response.data.message);
+    //what runs on load
+    useEffect(() => {
+        toast.promise(getCategories, {
+            error: {
+                render({data}){
+                    return data;
+                }
+            }
         });
-      };
+
+    }, []);
+
+
+    //handle submit
+    let handleSubmit = async (e) => {
+        e.preventDefault();
+        toast.promise(submitCategory, {
+            success: 'Successfully created note!',
+            error: {
+                render({data}){
+                    return data;
+                }
+            }
+        });
+    };
 
 
     return (

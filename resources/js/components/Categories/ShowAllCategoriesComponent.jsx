@@ -6,6 +6,9 @@ import React, { useMemo, useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 function ShowAllCategoriesComponent() {
 
   const columns = [
@@ -18,38 +21,48 @@ function ShowAllCategoriesComponent() {
 
   const [categories, setCategories] = useState([]);
 
-  async function getCategories() {
-    await axios
-      .get("/api/categories/showAll")
-      .then((response) => {
-        setCategories(response.data);
+      //gotta make these promises so that toasts work.
+  const getCategories = () =>
+      new Promise( (resolve, reject) => {
+          axios.get("/api/categories/showAll")
+          .then((response) => {
+              setCategories(response.data);
+              resolve();
+          }).catch((err) => {
+              reject(err.response.data.message);
+          })
+      }
+  )
+
+    useEffect(() => {
+        toast.promise(getCategories, {
+          error: 'Error retrieving categories'
       });
-  }
+    }, []);
 
-  useEffect(() => {
-    async function getData() {
-        await getCategories();
-    }
-      getData();
-  }, []);
+    const deleteCategory = (id) =>
+      new Promise( (resolve, reject) => {
+        if(confirm('do you really want to delete this category?')) {
+          axios
+          .delete("/api/categories/delete/" + id)
+            .then((response) => {
+              getCategories();
+              resolve();
+            });
+          } else {
+            reject('Request cancelled')
+          }
+      }
+    )
 
-  async function deleteCategory(id) {
-
-    if(confirm('do you really want to delete this category?')) {
-    await axios
-      .delete("/api/categories/delete/" + id)
-      .then((response) => {
-        getCategories();
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-      .finally(() => navigate(-1));
-
-    } else {
-      console.log('rejected')
-    }
-  }
+    const handleDelete = (id) => toast.promise(deleteCategory(id), {
+      success: 'Successfully deleted category!',
+      error: {
+          render({data}){
+              return data;
+          }
+      }
+    });
 
   return (
     <Container>
@@ -81,7 +94,7 @@ function ShowAllCategoriesComponent() {
                   <Link to={"/categories/edit/"+row.id}>
                     <Button variant='warning' >Edit</Button>{' '}
                   </Link>
-                  <Button variant='danger' onClick={() => deleteCategory(row.id)} >Delete</Button>
+                  <Button variant='danger' onClick={() => handleDelete(row.id)} >Delete</Button>
                 </td>
               </tr>
             ))}

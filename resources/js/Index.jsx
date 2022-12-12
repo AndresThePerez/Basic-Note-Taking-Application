@@ -16,12 +16,14 @@ import ShowCategoryComponent from './components/Categories/ShowCategoryComponent
 import Header from './components/Base/Header';
 import ShowAllNotesComponent from './components/Notes/ShowAllNotesComponent';
 import { Container } from 'react-bootstrap';
-import Toasty from './components/Base/Toast';
+import { ToastContainer } from 'react-toastify';
 
 ReactDOM.render(
         <Router>
             {/*static Header*/}
             <Header/>
+
+            <ToastContainer />
 
             <Container className='mt-5'>
                 <Routes>

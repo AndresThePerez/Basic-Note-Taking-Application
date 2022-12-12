@@ -3,23 +3,43 @@ import {Form, Button } from 'react-bootstrap'
 import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
+
 function CreateCategoryComponent() {
 
     const [name, setName] = useState([]);
 
     const navigate = new useNavigate();
 
+    const submitCategory = () =>
+        new Promise( (resolve, reject) => {
+            axios.post("/api/categories/create", {
+                name: name,
+            }).then((response) => {
+                resolve();
+                navigate(-1);
+            }).catch((err) => {
+                reject(err.response.data.message)
+            });
+        }
+    )
+
     let handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        await axios.post("/api/categories/create", {
-            name: name,
-        }).then((response) => {
-            console.log('sccuess', response)
-        }).catch((err) => {
-            console.log("err", err)
-        }).finally(() => navigate(-1));
+        toast.promise(submitCategory, {
+            success: 'Successfully created category!',
+            error: {
+                render({data}){
+                    return data;
+                }
+            }
+        });
+
+
     };
 
 

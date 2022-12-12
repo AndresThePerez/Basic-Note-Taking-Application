@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import {Form, Button, Toast} from 'react-bootstrap'
+import {Form, Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 
 function EditNoteComponent() {
 
@@ -17,10 +21,10 @@ function EditNoteComponent() {
 
     const navigate = new useNavigate();
 
-    useEffect(() => {
-
-        async function getNote() {
-          await axios
+    //gotta make these promises so that toasts work.
+    const getNote = () =>
+        new Promise( (resolve, reject) => {
+            axios
             .get("/api/notes/" + id)
             .then((response) => {
 
@@ -30,46 +34,66 @@ function EditNoteComponent() {
                 setBody(response.data.body);
                 setCategoryId(response.data.category.id);
                 setTitle(response.data.title);
+                resolve();
 
             }).catch((err) => {
-                console.log(err);
+                reject(err.response.data.message);
             });
         }
+    )
 
-        getNote();
-      }, []);
+    const getCategories = () =>
+        new Promise( (resolve, reject) => {
+            axios
+            .get("/api/categories/showAll")
+            .then((response) => {
+                setCategories(response.data);
+                resolve()
+            }).catch((err) => {
+                reject(err.response.data.message);
+            });
+        }
+    )
 
 
-      useEffect(() => {
-        async function getCategories() {
-            await axios
-              .get("/api/categories/showAll")
-              .then((response) => {
+    const editNotesSubmit = () =>
+        new Promise( (resolve, reject) => {
+            axios.put("/api/notes/edit/" + id , {
+                title: title,
+                body: body,
+                category_id: categoryId,
+            }).then((response) => {
+                resolve();
+                navigate(-1)
+            }).catch((err) => {
+                reject(err.response.data.message)
+            });
+        }
+    )
 
-                  setCategories(response.data);
+    useEffect(() => {
 
-              }).catch((err) => {
+        toast.promise(getCategories, {
+            error: 'Error retrieving Categories'
+        });
 
-                  console.log(err);
+        toast.promise(getNote, {
+            error: 'Error retrieving Notes'
+        });
 
-              });
-          }
-          getCategories();
       }, []);
 
 
       let handleSubmit = async (e) => {
         e.preventDefault();
-
-        await axios.put("/api/notes/edit/" + id , {
-            title: title,
-            body: body,
-            category_id: categoryId,
-        }).then((response) => {
-            console.log('sccuess', response)
-        }).catch((err) => {
-            console.log("err", err)
-        }).finally(() => navigate(-1));
+        toast.promise(editNotesSubmit, {
+            success: 'Successfully modified note!',
+            error: {
+                render({data}){
+                    return data;
+                }
+            }
+        });
       };
 
 
