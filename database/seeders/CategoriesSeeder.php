@@ -16,7 +16,7 @@ class CategoriesSeeder extends Seeder
     public function run()
     {
         DB::table('categories')->insert([
-            'name' => 'Random',
+            'name' => 'Category 1',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

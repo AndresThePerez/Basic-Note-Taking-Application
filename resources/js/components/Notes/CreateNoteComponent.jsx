@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import {Form, Button, Toast} from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom';
+import Toasty from '../Base/Toast';
 
 function CreateNoteComponent() {
 
+    //categories used for selection.
     const [categories, setCategories] = useState([]);
 
-    const [title, setTitle] = useState("");
-    const [body, setBody] = useState("");
-    const [category, setCategory] = useState("");
+    //the attributes we're changing.
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
+    const [category, setCategory] = useState('');
+
+    const navigate = new useNavigate();
 
 
     useEffect(() => {
@@ -15,18 +21,21 @@ function CreateNoteComponent() {
           await axios
             .get("/api/categories/showAll")
             .then((response) => {
-
                 setCategories(response.data);
-
+                <Toasty
+                    title="Success!"
+                    message="Successfully Created!"
+                    variant="success"
+                />
             }).catch((err) => {
-
-                console.log(err);
-
+                <Toasty
+                title="Error!"
+                message={err.data.message}
+                variant="danger"
+                />
             });
         }
-
         getCategories();
-
       }, []);
 
       let handleSubmit = async (e) => {
@@ -37,9 +46,14 @@ function CreateNoteComponent() {
             body: body,
             category_id: category,
         }).then((response) => {
-            console.log('sccuess', response)
+            <Toasty
+            title="Success!"
+            message="Successfully Created Note!"
+            variant="success"
+            />
+            navigate(-1);
         }).catch((err) => {
-            console.log("err", err)
+            console.log(err.response.data.message);
         });
       };
 

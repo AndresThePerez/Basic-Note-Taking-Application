@@ -13,7 +13,6 @@ class NotesController extends BaseController
     public function __construct()
     {
         $this->setModel(new Notes);
-        // parent::__construct();
     }
 
     /**

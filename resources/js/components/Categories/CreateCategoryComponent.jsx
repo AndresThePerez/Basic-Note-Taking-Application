@@ -1,24 +1,39 @@
-import React from 'react'
-import {Navbar, Nav, Container} from 'react-bootstrap'
-import {LinkContainer} from 'react-router-bootstrap'
+import React, { useState } from 'react'
+import {Form, Button } from 'react-bootstrap'
+import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const CreateCategoryComponent = () => {
+function CreateCategoryComponent() {
+
+    const [name, setName] = useState([]);
+
+    const navigate = new useNavigate();
+
+    let handleSubmit = async (e) => {
+
+        e.preventDefault();
+
+        await axios.post("/api/categories/create", {
+            name: name,
+        }).then((response) => {
+            console.log('sccuess', response)
+        }).catch((err) => {
+            console.log("err", err)
+        }).finally(() => navigate(-1));
+    };
+
+
     return (
-        <Navbar bg="light" expand="lg">
-            <Container>
-                <LinkContainer to="/">
-                    <Navbar.Brand className="me-auto">Note Application</Navbar.Brand>
-                </LinkContainer>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className='ms-auto'>
-                        <LinkContainer to="/deleted">
-                            <Nav.Link>Deleted Notes</Nav.Link>
-                        </LinkContainer>
-                    </Nav>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+        <Form onSubmit={handleSubmit}>
+            <h5>Create Category</h5>
+            <Form.Group className="mb-3" controlId="title">
+                <Form.Label>Category Name:</Form.Label>
+                <Form.Control type="text" placeholder="Category Name" required onChange={(e) => setName(e.target.value)}/>
+            </Form.Group>
+            <Button variant="primary" type="submit">
+                Submit
+            </Button>
+        </Form>
     )
 }
 

@@ -68,9 +68,9 @@ class BaseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showAllTrashed()
+    public function history()
     {
-        return $this->getModel()->trashed();
+        return $this->getModel()->history();
     }
 
 

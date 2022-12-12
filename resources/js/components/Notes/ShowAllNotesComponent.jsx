@@ -49,8 +49,6 @@ function MainTable() {
       .then((response) => {
         getNotes();
       });
-
-    //   await getNotes();
     } else {
       console.log('rejected')
     }

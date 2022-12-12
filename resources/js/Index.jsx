@@ -6,44 +6,49 @@ import ShowNoteComponent from './components/Notes/ShowNoteComponent'
 import EditNoteComponent from './components/Notes/EditNoteComponent'
 import CreateNoteComponent from './components/Notes/CreateNoteComponent'
 
-import HistoryComponent from './components/HistoryComponent'
+import HistoryComponent from './components/History/HistoryComponent'
 
 import CreateCategoryComponent from './components/Categories/CreateCategoryComponent'
 import EditCategoryComponent from './components/Categories/EditCategoryComponent'
 import ShowAllCategoriesComponent from './components/Categories/ShowAllCategoriesComponent'
 import ShowCategoryComponent from './components/Categories/ShowCategoryComponent'
 
-import Header from './components/Header';
-import MainTable from './components/MainTable';
+import Header from './components/Base/Header';
+import ShowAllNotesComponent from './components/Notes/ShowAllNotesComponent';
 import { Container } from 'react-bootstrap';
+import Toasty from './components/Base/Toast';
 
 ReactDOM.render(
         <Router>
-
+            {/*static Header*/}
             <Header/>
 
             <Container className='mt-5'>
-            <Routes>
+                <Routes>
 
-                <Route path="/" element={<MainTable />}/>
+                    {/*This is also the home page */}
+                    <Route path="/" element={<ShowAllNotesComponent />}/>
 
-                <Route path="/:id" element={<ShowNoteComponent />} /> //change this.
+                    {/*As per the requirements, added this extra route. Both point to the same component.*/}
+                    <Route path="/:id" element={<ShowNoteComponent />} />
+                    <Route path="/notes/:id" element={<ShowNoteComponent />} />
 
-                <Route path="/notes/:id" element={<ShowNoteComponent />} />
-                <Route path='/notes/edit/:id' element={<EditNoteComponent />} />
-                <Route path='/notes/create' element={<CreateNoteComponent />} />
+                    {/*Groups the rest of the note components together.*/}
+                    <Route path='/notes/edit/:id' element={<EditNoteComponent />} />
+                    <Route path='/notes/create' element={<CreateNoteComponent />} />
 
-                <Route path="/categories" element={<ShowAllCategoriesComponent/>} />
-                <Route path='/categories/edit/:id' element={<EditCategoryComponent/>}/>
-                <Route path='/categories/:id' element={<ShowCategoryComponent />} />
-                <Route path='/categories/create' element={<CreateCategoryComponent />} />
+                    {/*All the Category components can be grouped together.*/}
+                    <Route path="/categories" element={<ShowAllCategoriesComponent/>} />
+                    <Route path='/categories/edit/:id' element={<EditCategoryComponent/>}/>
+                    <Route path='/categories/:id' element={<ShowCategoryComponent />} />
+                    <Route path='/categories/create' element={<CreateCategoryComponent />} />
 
-                <Route path='/history' element={<HistoryComponent/>} />
+                    {/*Path to show all 'deleted' notes and categories.*/}
+                    <Route path='/history' element={<HistoryComponent/>} />
 
-            </Routes>
-
+                </Routes>
             </Container>
-
         </Router>,
+
         document.getElementById('root')
   );

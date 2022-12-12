@@ -1,25 +1,39 @@
-import React from 'react'
-import {Navbar, Nav, Container} from 'react-bootstrap'
-import {LinkContainer} from 'react-router-bootstrap'
+import Card from 'react-bootstrap/Card';
+import { useParams } from 'react-router';
+import { Table, Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 
-const ShowCategoryComponent = () => {
+function ShowCategoryComponent() {
+
+    const {id} = useParams();
+
+    const [category, setCategory] = useState([]);
+
+    useEffect(() => {
+        async function getCategory() {
+          await axios
+            .get("/api/categories/" + id )
+            .then((response) => {
+              setCategory(response.data)
+            });
+        }
+        getCategory();
+    }, []);
+
     return (
-        <Navbar bg="light" expand="lg">
-            <Container>
-                <LinkContainer to="/">
-                    <Navbar.Brand className="me-auto">Note Application</Navbar.Brand>
-                </LinkContainer>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className='ms-auto'>
-                        <LinkContainer to="/deleted">
-                            <Nav.Link>Deleted Notes</Nav.Link>
-                        </LinkContainer>
-                    </Nav>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
-    )
+        <Card>
+            <Card.Header> Category ID: {category.id} </Card.Header>
+            <Card.Body>
+                <Card.Title>Category Details</Card.Title>
+                    <Card.Text>
+                        <Table>
+                            <tr><th>Name</th><td>{category.name}</td></tr>
+                        </Table>
+                    </Card.Text>
+            </Card.Body>
+        </Card>
+      );
 }
 
 export default ShowCategoryComponent

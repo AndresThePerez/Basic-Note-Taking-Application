@@ -2,18 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Base\BaseModel;
 
-class Notes extends Model
+class Notes extends BaseModel
 {
-    use HasFactory, SoftDeletes;
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     protected $primaryKey = 'id';
 
@@ -40,9 +32,4 @@ class Notes extends Model
         return $this->belongsTo(Categories::class);
     }
 
-    public function trashed() {
-        return self::all()->filter(function($model) {
-            return is_null($model->deleted_at);
-        });
-    }
 }

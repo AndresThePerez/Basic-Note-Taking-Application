@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {Form, Button, Toast} from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 function EditNoteComponent() {
@@ -13,6 +14,8 @@ function EditNoteComponent() {
     const [categoryId, setCategoryId] = useState("");
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
+
+    const navigate = new useNavigate();
 
     useEffect(() => {
 
@@ -66,7 +69,7 @@ function EditNoteComponent() {
             console.log('sccuess', response)
         }).catch((err) => {
             console.log("err", err)
-        });
+        }).finally(() => navigate(-1));
       };
 
 
