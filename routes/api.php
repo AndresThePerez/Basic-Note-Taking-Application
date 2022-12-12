@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route::apiResources([
 //     'categories' => CategoriesController::class,
-//     'notes' => NotesController::class,
+//     'notes' => NotesController::class,r
 // ],[
 //     'except' => ['index']
 // ]);
@@ -31,6 +31,26 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(NotesController::class)->group(function () {
     Route::get('/notes/showAll', 'showAll');
-    Route::delete('/notes/deleteAll', 'deleteAll');
+    // Route::delete('/notes/deleteAll', 'deleteAll');
+
+    Route::post('/notes/create', 'store');
+    Route::put('/notes/edit/{id}', 'update');
+    Route::get('/notes/{id}', 'show');
+    Route::delete('/notes/delete/{id}', 'delete');
     Route::get('/{id}', 'show');
+
+    Route::get('/notes/trashed', 'showAllTrashed');
+
+});
+
+Route::controller(CategoriesController::class)->group(function () {
+
+    Route::get('/categories/showAll', 'showAll');
+    Route::delete('/categories/deleteAll', 'deleteAll');
+
+    Route::post('/categories/create', 'store');
+    Route::put('/categories/edit/{id}', 'update');
+    Route::get('/categories/{id}', 'show');
+    Route::delete('/categories/delete/{:id}', 'destroy');
+
 });

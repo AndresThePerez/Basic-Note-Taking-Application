@@ -10,25 +10,9 @@ class BaseController extends Controller
 
     private $model;
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param  mixed $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store($request)
-    {
-
-        if(!$this->validateRequest($request)){
-            return $this->failValErrorResponse();
-        }
-
-        if(!$this->getModel()::create($request)) {
-            return $this->createErrorResponse();
-        }
-
-        return $this->successResponse();
-    }
+    // public function __construct() {
+    //     parent::__construct();
+    // }
 
     /**
      * Display the specified resource.
@@ -38,36 +22,12 @@ class BaseController extends Controller
      */
     public function show($id)
     {
-        if(!$entity = $this->getModel()::get($id)) {
-            return $this->showErrorResponse();
+        $entity = $this->getModel()::findOrFail($id);
+        if(!$entity) {
+            return response(500, 'ERROR retrieving record');
         }
 
         return $entity;
-    }
-
-    /**
-     * Update a resource in the database
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-
-        if(!$this->validateRequest($request)){
-            return $this->failValErrorResponse();
-        }
-
-        if(!$entity = $this->getModel()::find($id)) {
-            $this->notFoundResponse();
-        }
-
-        if(!$entity->update($request)) {
-            $this->failUpdateResponse();
-        };
-
-        return $this->succesResponse();
     }
 
     /**
@@ -76,17 +36,19 @@ class BaseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-        if(!$entity = $this->getModel()::find($id)) {
-            $this->notFoundResponse();
+        $entity = $this->getModel()::where('id', $id);
+
+        if($entity->count() === 0) {
+            return response('Could not find the requested Resource', 404);
         }
 
         if(!$entity->delete()) {
-            $this->failDeleteResponse();
+            return response('Could not delete the requested Resource', 500);
         };
 
-        return $this->succesResponse();
+        return response('Success', 200);
     }
 
     /**
@@ -98,6 +60,17 @@ class BaseController extends Controller
     public function showAll()
     {
         return $this->getModel()::all();
+    }
+
+    /**
+     * Soft Delete all resource in the database
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showAllTrashed()
+    {
+        return $this->getModel()->trashed();
     }
 
 

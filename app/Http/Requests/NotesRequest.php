@@ -16,7 +16,7 @@ class NotesRequest extends FormRequest
     {
         return [
             'category_id' => 'required',
-            'title' => 'required|unique',
+            'title' => 'required|unique:notes',
             'body' => 'required'
         ];
     }

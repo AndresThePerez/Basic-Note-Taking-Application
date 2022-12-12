@@ -10,6 +10,11 @@ class Categories extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * The attributes that are mass assignable.
      *

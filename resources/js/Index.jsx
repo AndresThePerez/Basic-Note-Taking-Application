@@ -6,19 +6,23 @@ import ShowNoteComponent from './components/Notes/ShowNoteComponent'
 import EditNoteComponent from './components/Notes/EditNoteComponent'
 import CreateNoteComponent from './components/Notes/CreateNoteComponent'
 
+import HistoryComponent from './components/HistoryComponent'
+
 import CreateCategoryComponent from './components/Categories/CreateCategoryComponent'
-import EditCategoryComponent from './components/Category/EditCategoryComponent'
+import EditCategoryComponent from './components/Categories/EditCategoryComponent'
 import ShowAllCategoriesComponent from './components/Categories/ShowAllCategoriesComponent'
 import ShowCategoryComponent from './components/Categories/ShowCategoryComponent'
 
 import Header from './components/Header';
 import MainTable from './components/MainTable';
+import { Container } from 'react-bootstrap';
 
 ReactDOM.render(
         <Router>
 
             <Header/>
 
+            <Container className='mt-5'>
             <Routes>
 
                 <Route path="/" element={<MainTable />}/>
@@ -34,9 +38,11 @@ ReactDOM.render(
                 <Route path='/categories/:id' element={<ShowCategoryComponent />} />
                 <Route path='/categories/create' element={<CreateCategoryComponent />} />
 
-                <Route path='/notes/history' element={<HistoryNoteComponent/>} />
+                <Route path='/history' element={<HistoryComponent/>} />
 
             </Routes>
+
+            </Container>
 
         </Router>,
         document.getElementById('root')

@@ -10,6 +10,13 @@ class Notes extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    protected $primaryKey = 'id';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -31,5 +38,11 @@ class Notes extends Model
     public function category()
     {
         return $this->belongsTo(Categories::class);
+    }
+
+    public function trashed() {
+        return self::all()->filter(function($model) {
+            return is_null($model->deleted_at);
+        });
     }
 }
