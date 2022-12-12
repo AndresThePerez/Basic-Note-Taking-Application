@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained('categories');
-            $table->string('note_title');
-            $table->string('note_text');
+            $table->string('title');
+            $table->string('body');
             $table->timestamps();
             $table->softDeletes();
         });

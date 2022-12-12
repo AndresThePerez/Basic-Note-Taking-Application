@@ -15,9 +15,9 @@ class NotesRequest extends FormRequest
     public function rules()
     {
         return [
-            'category' => 'required',
-            'note_title' => 'required|unique',
-            'note_text' => 'required'
+            'category_id' => 'required',
+            'title' => 'required|unique',
+            'body' => 'required'
         ];
     }
 
@@ -31,9 +31,9 @@ class NotesRequest extends FormRequest
     {
         return [
             'category.required' => 'The category is required.',
-            'note_title.required' => 'The requested note\'s title is required.',
-            'note_title.unique' => 'The title of the note must be unique.',
-            'note_text' => 'The body of the note is required.'
+            'title.required' => 'The requested note\'s title is required.',
+            'title.unique' => 'The title of the note must be unique.',
+            'body.required' => 'The body of the note is required.'
         ];
     }
 }

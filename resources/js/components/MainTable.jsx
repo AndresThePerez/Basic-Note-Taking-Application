@@ -62,13 +62,16 @@ function MainTable() {
             {data.map((row) => (
               <tr>
                 <td>{row.id}</td>
-                <td>{row.category.category_name}</td>
-                <td>{row.note_title}</td>
-                <td>{row.note_text}</td>
+                <td>{row.category.name}</td>
+                <td>{row.title}</td>
+                <td>{row.body}</td>
                 <td>
-                <Link to={"/"+row.id}>
-                <Button> PLS </Button>
-                </Link>
+                  <Link to={"/notes/"+row.id}>
+                    <Button>View</Button>
+                  </Link>
+                  <Link to={"/notes/edit/"+row.id}>
+                    <Button>Edit</Button>
+                  </Link>
                 </td>
               </tr>
             ))}

@@ -15,7 +15,7 @@ class Notes extends Model
      *
      * @var array
      */
-    protected $fillable = ['note_title', 'note_text', 'category_id'];
+    protected $fillable = ['title', 'body', 'category_id'];
 
 
     /**

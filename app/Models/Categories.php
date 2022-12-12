@@ -15,7 +15,7 @@ class Categories extends Model
      *
      * @var array
      */
-    protected $fillable = ['category_name'];
+    protected $fillable = ['name'];
 
     /**
      * Get the notes for the blog post.

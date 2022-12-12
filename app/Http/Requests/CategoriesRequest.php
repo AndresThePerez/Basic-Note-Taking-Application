@@ -14,7 +14,7 @@ class CategoriesRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_name' => 'required|unique'
+            'name' => 'required|unique'
         ];
     }
 
@@ -26,8 +26,8 @@ class CategoriesRequest extends FormRequest
     public function messages()
     {
         return [
-            'category_name.required' => 'The category\'s name is required.',
-            'category_name.unique' => 'The requested category name is already used.',
+            'name.required' => 'The category\'s name is required.',
+            'name.unique' => 'The requested category name is already used.',
         ];
     }
 
