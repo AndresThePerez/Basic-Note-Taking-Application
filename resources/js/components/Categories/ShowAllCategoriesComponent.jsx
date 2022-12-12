@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function ShowAllCategoriesComponent() {
-    const columns = ["ID", "Name", "Action"];
+    const columns = ["ID", "Name", "Created At", "Updated At", "Action"];
 
     const [categories, setCategories] = useState([]);
 
@@ -80,6 +80,8 @@ function ShowAllCategoriesComponent() {
                         <tr>
                             <td>{row.id}</td>
                             <td>{row.name}</td>
+                            <td>{row.created_at}</td>
+                            <td>{row.updated_at}</td>
                             <td>
                                 <Link to={"/categories/" + row.id}>
                                     <Button variant="primary">View</Button>{" "}

@@ -38,6 +38,14 @@ function ShowNoteComponent() {
                             <th>Body</th>
                             <td>{note.body}</td>
                         </tr>
+                        <tr>
+                            <th>Created At</th>
+                            <td>{note.created_at}</td>
+                        </tr>
+                        <tr>
+                            <th>Updated At</th>
+                            <td>{note.updated_at}</td>
+                        </tr>
                     </Table>
                 </Card.Text>
             </Card.Body>

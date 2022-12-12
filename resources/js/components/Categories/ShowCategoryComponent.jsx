@@ -28,6 +28,14 @@ function ShowCategoryComponent() {
                             <th>Name</th>
                             <td>{category.name}</td>
                         </tr>
+                        <tr>
+                            <th>Created At</th>
+                            <td>{category.created_at}</td>
+                        </tr>
+                        <tr>
+                            <th>Updated at</th>
+                            <td>{category.updated_at}</td>
+                        </tr>
                     </Table>
                 </Card.Text>
             </Card.Body>

@@ -11,7 +11,15 @@ import "react-toastify/dist/ReactToastify.css";
 function MainTable() {
     const [loadingData, setLoadingData] = useState(true);
 
-    const columns = ["ID", "Category", "Title", "Body", "Action"];
+    const columns = [
+        "ID",
+        "Category",
+        "Title",
+        "Body",
+        "Created At",
+        "Updated At",
+        "Action",
+    ];
 
     const [data, setData] = useState([]);
     //gotta make these promises so that toasts work.
@@ -91,6 +99,8 @@ function MainTable() {
                                       <td>{row.category.name}</td>
                                       <td>{row.title}</td>
                                       <td>{row.body}</td>
+                                      <td>{row.created_at}</td>
+                                      <td>{row.updated_at}</td>
                                       <td>
                                           <Link to={"/notes/" + row.id}>
                                               <Button variant="primary">
