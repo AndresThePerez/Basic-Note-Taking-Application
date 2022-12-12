@@ -38,39 +38,39 @@ https://docs.docker.com/desktop/install/mac-install/
 
 We need the `.vendor` directory
 
-### 1. Run `npm install`
+### 2. Run `npm install`
 
 Vite won't work without js dependencies installed, and neither will react.
 
-### 2. create `.env` file
+### 3. create `.env` file
 
 Copy `.env.example` to create the `.env` file.
 
-### 3. create APP_KEY variable
+### 4. create APP_KEY variable
 
 run `php artisan key:generate` in your terminal
 
-### 3. Run sail
+### 5. Run sail
 
 `./vendor/bin/sail up`
 
 <p>This should start up the application, install dependencies and start the server. (This may take a while to build)</p>
 
-### 4. compile dependencies with vite
+### 6. compile dependencies with vite
 
 `./vendor/bin/sail npm run watch`
 
-### 5. run migrations
+### 7. run migrations
 
 open another terminal and run `./vendor/bin/sail artisan migrate`
 
-### 6. run seeders
+### 8. run seeders
 
 `/vendor/bin/sail artisan db:seed`
 
 If you run into any more problems, reach out to me or check out laravel's extensive documentation!
 
-### 6. open web browser and type `localhost` in the browser!
+### 9. open web browser and type `localhost` in the browser!
 
 If you run into any more problems, reach out to me or check out laravel's extensive documentation!
 
