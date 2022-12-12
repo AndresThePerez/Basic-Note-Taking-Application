@@ -21,13 +21,14 @@ class BaseModel extends Model
      * @var array
      */
     protected $casts = [
-        'created_at' => 'datetime:Y-m-d',
-        'updated_at' => 'datetime:Y-m-d',
-        'deleted_at' => 'datetime:Y-m-d',
+        'created_at' => 'datetime:Y-m-d h:i A',
+        'updated_at' => 'datetime:Y-m-d h:i A',
+        'deleted_at' => 'datetime:Y-m-d h:i A',
     ];
 
 
-    public function history() {
+    public function history()
+    {
         return self::onlyTrashed()->get();
     }
 }

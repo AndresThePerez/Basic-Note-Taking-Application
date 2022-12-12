@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class NotesRequest extends FormRequest
 {
@@ -16,7 +18,7 @@ class NotesRequest extends FormRequest
     {
         return [
             'category_id' => 'required',
-            'title' => 'required|unique:notes',
+            'title' => ['required', Rule::unique('notes')->ignore($this->id)],
             'body' => 'required'
         ];
     }
@@ -30,10 +32,23 @@ class NotesRequest extends FormRequest
     public function messages()
     {
         return [
-            'category.required' => 'The category is required.',
+            'category.required' => 'The category field is required.',
             'title.required' => 'The requested note\'s title is required.',
             'title.unique' => 'The title of the note must be unique.',
             'body.required' => 'The body of the note is required.'
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'title' => strip_tags($this->title),
+            'body' => strip_tags($this->body)
+        ]);
     }
 }

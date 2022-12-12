@@ -6,7 +6,6 @@ use App\Http\Controllers\Base\BaseController;
 use App\Http\Requests\NotesRequest;
 
 use App\Models\Notes;
-use Illuminate\Support\Facades\Log;
 
 class NotesController extends BaseController
 {
@@ -18,17 +17,17 @@ class NotesController extends BaseController
     /**
      * Show the form for creating a new resource.
      *
-     * @param  mixed $request
+     * @param  NotesRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(NotesRequest $request)
     {
         // dd($request);
-        if(!$this->validateRequest($request)){
+        if (!$this->validateRequest($request)) {
             return response($request->errors(), 500);
-    }
+        }
 
-        if(!$this->getModel()::create($request->all())) {
+        if (!$this->getModel()::create($request->all())) {
             return response('Error creating request', 500);
         }
 
@@ -38,22 +37,22 @@ class NotesController extends BaseController
     /**
      * Update a resource in the database
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  NotesRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(NotesRequest $request, $id)
     {
 
-        if(!$this->validateRequest($request)){
+        if (!$this->validateRequest($request)) {
             return response($request->errors(), 500);
         }
 
-        if(!$entity = $this->getModel()::find($id)) {
-            return response('Could not find resource', 500);
+        if (!$entity = $this->getModel()::find($id)) {
+            return response('Could not find resource', 404);
         }
 
-        if(!$entity->update($request->all())) {
+        if (!$entity->update($request->all())) {
             return response('Error updating request', 500);
         };
 
@@ -63,7 +62,7 @@ class NotesController extends BaseController
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \App\Http\Requests\NotesRequest  $request
+     * @param  NotesRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function validateRequest(NotesRequest $request)

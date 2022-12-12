@@ -18,6 +18,6 @@ class Categories extends BaseModel
      */
     public function notes()
     {
-        return $this->hasMany(Notes::class);
+        return $this->hasMany(Notes::class)->withTrashed();
     }
 }

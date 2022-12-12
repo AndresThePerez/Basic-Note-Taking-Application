@@ -7,8 +7,6 @@ use App\Models\Base\BaseModel;
 class Notes extends BaseModel
 {
 
-    protected $primaryKey = 'id';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -29,7 +27,6 @@ class Notes extends BaseModel
      */
     public function category()
     {
-        return $this->belongsTo(Categories::class);
+        return $this->belongsTo(Categories::class)->withTrashed();
     }
-
 }

@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Base\BaseController;
 use App\Http\Requests\CategoriesRequest;
-use Illuminate\Http\Request;
-
 use App\Models\Categories;
 
 class CategoriesController extends BaseController
@@ -16,19 +14,18 @@ class CategoriesController extends BaseController
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Storing the resource after validation
      *
-     * @param  mixed $request
+     * @param  CategoriesRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(CategoriesRequest $request)
     {
-        // dd($request);
-        if(!$this->validateRequest($request)){
+        if (!$this->validateRequest($request)) {
             return response($request->errors(), 500);
-    }
+        }
 
-        if(!$this->getModel()::create($request->all())) {
+        if (!$this->getModel()::create($request->all())) {
             return response('Error creating request', 500);
         }
 
@@ -38,22 +35,22 @@ class CategoriesController extends BaseController
     /**
      * Update a resource in the database
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  CategoriesRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(CategoriesRequest $request, $id)
     {
 
-        if(!$this->validateRequest($request)){
+        if (!$this->validateRequest($request)) {
             return response($request->errors(), 500);
         }
 
-        if(!$entity = $this->getModel()::find($id)) {
-            return response('Could not find resource', 500);
+        if (!$entity = $this->getModel()::find($id)) {
+            return response('Could not find resource', 404);
         }
 
-        if(!$entity->update($request->all())) {
+        if (!$entity->update($request->all())) {
             return response('Error updating request', 500);
         };
 
@@ -63,12 +60,11 @@ class CategoriesController extends BaseController
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \App\Http\Requests\CategoriesRequest  $request
+     * @param  CategoriesRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function validateRequest(CategoriesRequest $request)
     {
         return $request->validated();
     }
-
 }

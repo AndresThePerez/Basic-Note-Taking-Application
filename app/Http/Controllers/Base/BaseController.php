@@ -2,17 +2,10 @@
 
 namespace App\Http\Controllers\Base;
 
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-
 class BaseController extends Controller
 {
 
     private $model;
-
-    // public function __construct() {
-    //     parent::__construct();
-    // }
 
     /**
      * Display the specified resource.
@@ -23,8 +16,8 @@ class BaseController extends Controller
     public function show($id)
     {
         $entity = $this->getModel()::findOrFail($id);
-        if(!$entity) {
-            return response(500, 'ERROR retrieving record');
+        if (!$entity) {
+            return response('Could not find the requested Resource', 404);
         }
 
         return $entity;
@@ -40,12 +33,12 @@ class BaseController extends Controller
     {
         $entity = $this->getModel()::where('id', $id);
 
-        if($entity->count() === 0) {
+        if ($entity->count() === 0) {
             return response('Could not find the requested Resource', 404);
         }
 
-        if(!$entity->delete()) {
-            return response('Could not delete the requested Resource', 500);
+        if (!$entity->delete()) {
+            return response('Error deleting requested resource', 500);
         };
 
         return response('Success', 200);
@@ -86,11 +79,13 @@ class BaseController extends Controller
     }
 
 
-    protected function setModel($value) {
+    protected function setModel($value)
+    {
         $this->model = $value;
     }
 
-    protected function getModel() {
+    protected function getModel()
+    {
         return $this->model;
     }
 }
